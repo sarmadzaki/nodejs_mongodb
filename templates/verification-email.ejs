@@ -1,0 +1,23 @@
+<body style="margin: 0; padding: 20px; background-color: #edeced;">
+    <div style="max-width: 700px; color: #404040; font: 14px/22px 'Open Sans',Arial,Helvetica,sans-serif; margin: 20px auto;">
+        <div style="overflow: hidden; text-align:center; margin-bottom: 20px;">
+            <h2>Claim You</h2>
+        </div>
+        <div style="background: #fff; border-radius: 2px; box-shadow: 0px 0px 1px #C2C2C2; overflow: hidden; padding: 30px; text-align:center;">
+            <p>Dear
+                <%- username %>,
+            </p>
+            <p>Thank you so much for registering on Claim You.</p>
+            <p>You are almost there.</p>
+            <p>To complete the email verification process, click the following link and then log in to your claim you account.</p>
+            <a href="<%- verification_link %>" target="_blank" style="border-radius: 3px; text-align: center; height: 48px; line-height:48px; text-decoration:none; padding-right: 12px; padding-left: 12px; margin: 40px auto 5px; color: #fff; background: #36c2ce; border: 1px solid #36c2ce; display: block; width: 200px;">
+                Verify Email Address
+            </a>
+            <p>For your account's protection, the above link is good for single use and expires in one week.</p>
+            <p>If you have never logged into this Claim You account before, forward this email to the account's Admin User
+                <%- username %> who will either provide you with your Claim You username/password OR click the verification link on your
+                    behalf because your email is not associated with a login profile (e.g. Technical, or Emergency Contact).
+            </p>
+        </div>
+    </div>
+</body>

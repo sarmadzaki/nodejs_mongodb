@@ -9,6 +9,7 @@ const UserSchema = new Schema({
     password: String,
     role: { type: String, default: CONST.USER_ROLE[1]},
     status: {type: String, default: CONST.USER_STATUS[0]},
+    verification_link: String,
     created_at: {
         type: Date,
         default: Date.now

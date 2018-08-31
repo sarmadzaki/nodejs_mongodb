@@ -1,6 +1,9 @@
-import { User, UserToken } from '../../models'
-import { hashSync, compareSync } from 'bcrypt'
-import randomstring from 'randomstring'
+import { User, UserToken } from '../../models';
+import { hashSync, compareSync } from 'bcrypt';
+import randomstring from 'randomstring';
+import { sendEmail } from '../../common/helper';
+import * as helper from './auth-helper';
+import * as CONST from '../../constants';
 
 export const login = async (req, res) => {
     try {
@@ -25,15 +28,31 @@ export const register = async (req, res) => {
         let isUser = await User.findOne({ email });
         if (isUser) return res.json({ success: false, message: 'User is already registered' });
         password = hashSync(password, 10);
-        let userResponse = await User.create({ first_name, last_name, email, password });
-        let { _id } = userResponse;
+        let userResponse = await User.create({ first_name, last_name, email, password, verification_link: randomstring.generate(10) });
+        let { _id, verification_link } = userResponse;
         let tokenResponse = await UserToken.create({ user_id: _id, expired: false, token: randomstring.generate(20) });
-        let { token } = tokenResponse;
         let data = { _id, first_name, last_name, email, token };
+        let { token } = tokenResponse;
+        await sendEmail(helper.registerEmail(email, first_name, verification_link), { email, subject: 'Claim You Email Verification' });
         return res.json({ success: true, data: data, message: 'Registered successfully' });
     }
     catch (dberror) {
         console.log('error', dberror);
         return res.json({ success: false, message: dberror.message });
+    }
+}
+
+export const emailVerification = async (req, res) => {
+    try {
+        let { link } = req.query;
+        let isUser = await User.findOne({ verification_link: link });
+        if (!isUser) return res.json({ success: false, message: 'Verification link is not working right now' });
+        if (isUser.status == CONST.USER_STATUS[1]) return res.json({ success: false, message: 'You are already verfied' });
+        let verified = await User.findByIdAndUpdate({ _id: isUser._id }, { status: CONST.USER_STATUS[1] });
+        if (!verified) return res.json({ success: false, message: 'Link is not working right now.' });
+        return res.json({ success: true, message: "Congratulations! Your account is verified." });
+    }
+    catch (error) {
+        return res.json({ success: false, message: error.message });
     }
 }
