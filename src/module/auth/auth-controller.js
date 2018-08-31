@@ -37,7 +37,6 @@ export const register = async (req, res) => {
         return res.json({ success: true, data: data, message: 'Registered successfully' });
     }
     catch (dberror) {
-        console.log('error', dberror);
         return res.json({ success: false, message: dberror.message });
     }
 }
@@ -51,6 +50,21 @@ export const emailVerification = async (req, res) => {
         let verified = await User.findByIdAndUpdate({ _id: isUser._id }, { status: CONST.USER_STATUS[1] });
         if (!verified) return res.json({ success: false, message: 'Link is not working right now.' });
         return res.json({ success: true, message: "Congratulations! Your account is verified." });
+    }
+    catch (error) {
+        return res.json({ success: false, message: error.message });
+    }
+}
+
+export const logout = async (req, res) => {
+    try {
+        let { token } = req.headers;
+        let tokenResponse = await UserToken.findOne({ token: token });
+        if (!tokenResponse) return res.json({ success: false, message: 'provided token not found.' });
+        if (tokenResponse.expired) return res.json({ success: false, message: 'This account is already logged out.' });
+        let update = await UserToken.findByIdAndUpdate({ _id: tokenResponse.id }, { expired: true });
+        if (update) return res.json({ success: true, message: 'successfully logged out.' });
+        return res.json({ success: false, message: 'did not updated successfully.' });
     }
     catch (error) {
         return res.json({ success: false, message: error.message });
