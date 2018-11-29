@@ -11,7 +11,7 @@ export const sendEmail = (typeOfMail, data) => {
         });
         let mailOptions = {
             from: `${process.env.MAIL_FROM_NAME} <${process.env.MAIL_EMAIL}>`,
-            to: data.email || 'sarmad.zaki@progstream.com',
+            to: data.email || 'zaki.sarmad21@gmail.com',
             subject: data.subject || 'Test Checking',
             text: ' ',
             html: typeOfMail
