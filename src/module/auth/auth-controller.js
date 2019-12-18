@@ -4,40 +4,76 @@ import randomstring from 'randomstring';
 import { sendEmail } from '../../common/helper';
 import * as helper from './auth-helper';
 import * as CONST from '../../constants';
+import { MESSAGES } from '../../common/Messages';
 
 export const login = async (req, res) => {
+    const { USER_NOT_EXIST, 
+            WRONG_PASSWORD,
+            ERROR_WITH_CUSTOM_MESSAGE,
+            SUCCESS_MESSAGE,
+         } = MESSAGES;
     try {
         let { email, password } = req.body;
         let isUser = await User.findOne({ email });
-        if (!isUser) return res.json({ success: false, message: 'User is not registered' });
-        if (!compareSync(password, isUser.password)) return res.json({ success: false, message: 'password did not match' })
-        let tokenResponse = await UserToken.create({ user_id: _id, expired: false, token: randomstring.generate(20) });
+        if (!isUser) return res.json(USER_NOT_EXIST);
+        if (!compareSync(password, isUser.password)) 
+        return res.json(WRONG_PASSWORD)
+        let tokenResponse = await UserToken.create({ 
+            user_id: _id,
+            expired: false,
+            token: randomstring.generate(20)
+        });
         let { _id, first_name, last_name } = isUser;
         let { token } = tokenResponse;
-        let data = { _id, first_name, last_name, email, token };
-        return res.json({ status: 200, success: true, data: data, message: "log in successfully" })
+        let data = {
+             _id,
+             first_name,
+             last_name,
+             email,
+             token
+            };
+        return res.json(SUCCESS_MESSAGE('Login'));
     }
     catch (error) {
-        return res.json({ status: 200, success: false, message: error.message, line: error })
+        return res.json(ERROR_WITH_CUSTOM_MESSAGE(error.message));
     }
 }
 
 export const register = async (req, res) => {
+    const { USER_ALREADY_REGISTERED,
+            SUCCESS_MESSAGE,
+            ERROR_WITH_CUSTOM_MESSAGE,
+         } = MESSAGES;
     try {
         let { email, password, first_name, last_name } = req.body;
         let isUser = await User.findOne({ email });
-        if (isUser) return res.json({ success: false, message: 'User is already registered' });
+        if (isUser) return res.json(USER_ALREADY_REGISTERED);
         password = hashSync(password, 10);
-        let userResponse = await User.create({ first_name, last_name, email, password, verification_link: randomstring.generate(10) });
+        let userResponse = await User.create({ 
+            first_name, 
+            last_name, 
+            email, 
+            password, 
+            verification_link: randomstring.generate(10) 
+        });
         let { _id, verification_link } = userResponse;
-        let tokenResponse = await UserToken.create({ user_id: _id, expired: false, token: randomstring.generate(20) });
-        let data = { _id, first_name, last_name, email, token };
+        let tokenResponse = await UserToken.create({ 
+            user_id: _id, 
+            expired: false, 
+            token: randomstring.generate(20) 
+        });
+        let data = { 
+            _id, 
+            first_name, 
+            last_name, 
+            email, 
+            token };
         let { token } = tokenResponse;
         await sendEmail(helper.registerEmail(email, first_name, verification_link), { email, subject: 'Claim You Email Verification' });
-        return res.json({ success: true, data: data, message: 'Registered successfully' });
+        return res.json(SUCCESS_MESSAGE('Registered'));
     }
-    catch (dberror) {
-        return res.json({ success: false, message: dberror.message });
+    catch (error) {
+        return res.json(ERROR_WITH_CUSTOM_MESSAGE(error.message));
     }
 }
 
