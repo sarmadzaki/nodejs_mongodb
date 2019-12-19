@@ -5,7 +5,10 @@ process.env.DB_DEV_USERNAME,
 password = process.env.DB_DEV_PASSWORD,
 host = process.env.DB_DEV_HOST;
 
-let url = `mongodb://${username}:${password}${host}`;
+// let url = `mongodb://${username}:${password}${host}`;
+let url = `mongodb://localhost:27017/new_database`;
+
+console.log('URL :::', url)
 
 export default () => {
   mongoose.Promise = global.Promise;

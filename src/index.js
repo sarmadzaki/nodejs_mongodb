@@ -4,14 +4,18 @@ import morgan from 'morgan';
 import bodyParser from 'body-parser'
 import fs from 'fs';
 
-import dbConfig from '../config/db';
+/**
+ * for MongoDb import from mongodb.js.
+ * for SQL import from sequelizeConfig.js
+ */
+import Sequelize from '../config/sequelizeConfig';
 import { AuthRouter } from './module';
 import { errorRoute } from './common/errorHandler';
 
 const app = express();
 
 //db connections
-dbConfig();
+Sequelize.initializeDatabaseConnection();
 app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
