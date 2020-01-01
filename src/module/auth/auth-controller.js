@@ -1,4 +1,4 @@
-import { User, UserToken } from '../../models';
+import { User, UserToken } from '../../models/Mongo';
 import { hashSync, compareSync } from 'bcrypt';
 import randomstring from 'randomstring';
 import { sendEmail } from '../../common/helper';
