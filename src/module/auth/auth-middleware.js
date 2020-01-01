@@ -1,4 +1,4 @@
-import { userToken } from "../../models/userToken";
+import { userToken } from "../../models/Mongo/userToken";
 
 
 export const isLoggedIn = async (req, res, next) => {

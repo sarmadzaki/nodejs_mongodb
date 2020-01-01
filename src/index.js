@@ -5,7 +5,7 @@ import bodyParser from 'body-parser'
 import fs from 'fs';
 
 /**
- * for MongoDb import from mongodb.js.
+ * for MongoDb import from mongodb.js. And run 
  * for SQL import from sequelizeConfig.js
  */
 import Sequelize from '../config/sequelizeConfig';
@@ -20,11 +20,15 @@ app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-// create log file
-app.use(morgan('common', {
-    stream: fs.createWriteStream('./logger.log', {flags: 'a'})
-}));
-app.use(morgan('dev'));
+/**
+ * If you want to use morgan for logger uncomment the below code.
+ */
+
+/** app.use(morgan('common', {
+     stream: fs.createWriteStream('./logger.log', {flags: 'a'})
+ }));
+ app.use(morgan('dev'));
+*/
 
 //Routes
 app.get('/hello', (req, res) => {
