@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
+    <h1>Login component</h1>
     <div>
   </div>
   </div>
@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: 'Home',
+  name: 'Login',
   props: {
     msg: String,
   }
