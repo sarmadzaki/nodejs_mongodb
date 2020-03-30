@@ -5,7 +5,7 @@ import bodyParser from 'body-parser'
 import fs from 'fs';
 
 import dbConfig from '../config/db';
-import { AuthRouter } from './module';
+import { AuthRouter, TodoRouter} from './module';
 import { errorRoute } from './common/errorHandler';
 
 const app = express();
@@ -26,10 +26,10 @@ app.use(morgan('dev'));
 app.get('/hello', (req, res) => {
     res.send('Hello World!');
 });
-app.use('/api/', [AuthRouter]);
+app.use('/api/', [AuthRouter, TodoRouter]);
 
 //Route Error
 app.use('/',errorRoute);
 
 //server initialization
-app.listen(3000, () => console.log('Example app listening on port 3000!'))
+app.listen(3001, () => console.log('Example app listening on port 3001!'))

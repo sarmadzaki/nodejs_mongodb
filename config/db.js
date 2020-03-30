@@ -6,7 +6,6 @@ password = process.env.DB_DEV_PASSWORD,
 host = process.env.DB_DEV_HOST;
 
 let url = `mongodb://${username}:${password}${host}`;
-
 export default () => {
   mongoose.Promise = global.Promise;
   mongoose.connect(url,{useNewUrlParser: true});
