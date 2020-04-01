@@ -54,6 +54,6 @@ app.use('/api/', [_module.AuthRouter, _module.TodoRouter]);
 app.use('/', _errorHandler.errorRoute);
 
 //server initialization
-app.listen(3001, function () {
-    return console.log('Example app listening on port 3001!');
+app.listen(process.env.PORT || 3001, function () {
+    return console.log('Example app listening on port ' + (process.env.PORT || 3001) + '!');
 });
