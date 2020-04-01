@@ -66,7 +66,7 @@ export const updateTodo = async (req, res) => {
   try {
     const { id, title } = req.body;
     if (!id) return res.json(ERROR_WITH_CUSTOM_MESSAGE('Id is not provided'));
-    const response = await TodoSchema.findOneAndUpdate(id, { title });
+    const response = await TodoSchema.findOneAndUpdate(id, { title }, {new: true});
     let message = `Todo of ID ${id} not found.`
     if (!response) return res.json(ERROR_WITH_CUSTOM_MESSAGE(message));
     return res.json({
