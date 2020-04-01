@@ -81,10 +81,10 @@ export const emailVerification = async (req, res) => {
     try {
         let { link } = req.query;
         let isUser = await User.findOne({ verification_link: link });
-        if (!isUser) return res.json({ success: false, message: 'Verification link is not working right now' });
+        if (!isUser) return res.json({ success: false, message: CONST.ERRORS['LINK_DOWN'] });
         if (isUser.status == CONST.USER_STATUS[1]) return res.json({ success: false, message: 'You are already verfied' });
         let verified = await User.findByIdAndUpdate({ _id: isUser._id }, { status: CONST.USER_STATUS[1] });
-        if (!verified) return res.json({ success: false, message: 'Link is not working right now.' });
+        if (!verified) return res.json({ success: false, message: CONST.ERRORS['LINK_DOWN'] });
         return res.json({ success: true, message: "Congratulations! Your account is verified." });
     }
     catch (error) {

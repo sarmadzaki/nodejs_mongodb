@@ -1,2 +1,2 @@
 # Nodejs With MongoDB
-implementing a new idea by using nodejs at backend side.
+A Nodejs boilerplate with SQL/MongoDb implemented. Plug and Play :)
