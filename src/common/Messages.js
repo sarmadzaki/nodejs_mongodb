@@ -13,6 +13,7 @@ export const MESSAGES = {
         code: 400,
         success: false,
         message: message,
+        data: [],
     }),
     USER_NOT_EXIST: {
         code: 400,

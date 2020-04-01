@@ -1,4 +1,8 @@
 import { TodoSchema } from '../../models';
+import { MESSAGES } from '../../common/Messages';
+const {
+  ERROR_WITH_CUSTOM_MESSAGE
+} = MESSAGES;
 export const addTodo = async (req, res) => {
   try {
     const { title, description } = req.body;
@@ -44,17 +48,10 @@ export const getTodo = async (req, res) => {
 export const deleteTodo = async (req, res) => {
   try {
     const { id } = req.body;
-    if (!id) return res.json({
-      code: 400,
-      success: false,
-      message: `id is not provided.`
-    });
+    if (!id) return res.json(ERROR_WITH_CUSTOM_MESSAGE('Id is not provided'));
     const response = await TodoSchema.findOneAndDelete({ _id: id });
-    if (!response) return res.json({
-      code: 400,
-      success: false,
-      message: `Todo of ID ${id} not found.`
-    });
+    let message =  `Todo of ID ${id} not found.`
+    if (!response) return res.json(ERROR_WITH_CUSTOM_MESSAGE(message));
     return res.json({
       code: 200,
       success: true,
@@ -62,11 +59,6 @@ export const deleteTodo = async (req, res) => {
       data: response,
     })
   } catch (error) {
-    res.json({
-      code: 400,
-      success: false,
-      message: error.message,
-      data: []
-    });
+    res.json(ERROR_WITH_CUSTOM_MESSAGE(error.message));
   }
 }
