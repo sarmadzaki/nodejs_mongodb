@@ -50,7 +50,7 @@ export const deleteTodo = async (req, res) => {
     const { id } = req.body;
     if (!id) return res.json(ERROR_WITH_CUSTOM_MESSAGE('Id is not provided'));
     const response = await TodoSchema.findOneAndDelete({ _id: id });
-    let message =  `Todo of ID ${id} not found.`
+    let message = `Todo of ID ${id} not found.`
     if (!response) return res.json(ERROR_WITH_CUSTOM_MESSAGE(message));
     return res.json({
       code: 200,
@@ -60,5 +60,27 @@ export const deleteTodo = async (req, res) => {
     })
   } catch (error) {
     res.json(ERROR_WITH_CUSTOM_MESSAGE(error.message));
+  }
+}
+export const updateTodo = async (req, res) => {
+  try {
+    const { id, title } = req.body;
+    if (!id) return res.json(ERROR_WITH_CUSTOM_MESSAGE('Id is not provided'));
+    const response = await TodoSchema.findOneAndUpdate(id, { title });
+    let message = `Todo of ID ${id} not found.`
+    if (!response) return res.json(ERROR_WITH_CUSTOM_MESSAGE(message));
+    return res.json({
+      code: 201,
+      success: true,
+      message: 'Todo is updated successfully',
+      data: response,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      success: false,
+      message: error.message,
+      data: []
+    });
   }
 }
