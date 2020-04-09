@@ -4,7 +4,7 @@ import morgan from 'morgan';
 import bodyParser from 'body-parser'
 import fs from 'fs';
 
-import dbConfig from '../config/db';
+import dbConfig from './config/db';
 import { AuthRouter, TodoRouter} from './module';
 import { errorRoute } from './common/errorHandler';
 
@@ -32,4 +32,4 @@ app.use('/api/', [AuthRouter, TodoRouter]);
 app.use('/',errorRoute);
 
 //server initialization
-app.listen(3001, () => console.log('Example app listening on port 3001!'))
+app.listen(process.env.PORT || 3001, () => console.log(`Example app listening on port ${process.env.PORT || 3001}!`))
