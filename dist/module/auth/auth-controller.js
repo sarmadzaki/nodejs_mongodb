@@ -9,6 +9,10 @@ var _regenerator = require('babel-runtime/regenerator');
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
+var _extends2 = require('babel-runtime/helpers/extends');
+
+var _extends3 = _interopRequireDefault(_extends2);
+
 var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
@@ -88,7 +92,7 @@ var login = exports.login = function () {
                             email: email,
                             token: token
                         };
-                        return _context.abrupt('return', res.json(SUCCESS_MESSAGE('Login')));
+                        return _context.abrupt('return', res.json((0, _extends3.default)({}, SUCCESS_MESSAGE('Login'), { data: data })));
 
                     case 19:
                         _context.prev = 19;
@@ -130,11 +134,14 @@ var register = exports.register = function () {
                             break;
                         }
 
-                        return _context2.abrupt('return', res.json(USER_ALREADY_REGISTERED));
+                        return _context2.abrupt('return', res.json({
+                            code: 400,
+                            success: false,
+                            message: 'User is already registered.'
+                        }));
 
                     case 8:
-                        password = (0, _bcrypt.hashSync)(password, 10);
-                        _context2.next = 11;
+                        _context2.next = 10;
                         return _models.User.create({
                             first_name: first_name,
                             last_name: last_name,
@@ -143,42 +150,42 @@ var register = exports.register = function () {
                             verification_link: _randomstring2.default.generate(10)
                         });
 
-                    case 11:
+                    case 10:
                         userResponse = _context2.sent;
                         _id = userResponse._id, verification_link = userResponse.verification_link;
-                        _context2.next = 15;
+                        _context2.next = 14;
                         return _models.UserToken.create({
                             user_id: _id,
                             expired: false,
                             token: _randomstring2.default.generate(20)
                         });
 
-                    case 15:
+                    case 14:
                         tokenResponse = _context2.sent;
                         data = {
                             _id: _id,
                             first_name: first_name,
                             last_name: last_name,
                             email: email,
-                            token: token };
+                            token: token
+                        };
                         token = tokenResponse.token;
-                        _context2.next = 20;
-                        return (0, _helper.sendEmail)(helper.registerEmail(email, first_name, verification_link), { email: email, subject: 'Claim You Email Verification' });
 
-                    case 20:
-                        return _context2.abrupt('return', res.json(SUCCESS_MESSAGE('Registered')));
+                        console.log('ssssss');
+                        // await sendEmail(helper.registerEmail(email, first_name, verification_link), { email, subject: 'Claim You Email Verification' });
+                        return _context2.abrupt('return', res.json((0, _extends3.default)({}, SUCCESS_MESSAGE('Registered'), { data: data, token: token })));
 
-                    case 23:
-                        _context2.prev = 23;
+                    case 21:
+                        _context2.prev = 21;
                         _context2.t0 = _context2['catch'](1);
                         return _context2.abrupt('return', res.json(ERROR_WITH_CUSTOM_MESSAGE(_context2.t0.message)));
 
-                    case 26:
+                    case 24:
                     case 'end':
                         return _context2.stop();
                 }
             }
-        }, _callee2, undefined, [[1, 23]]);
+        }, _callee2, undefined, [[1, 21]]);
     }));
 
     return function register(_x3, _x4) {

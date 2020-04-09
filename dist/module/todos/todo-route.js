@@ -18,4 +18,5 @@ var router = (0, _express.Router)();
 router.get('/todo', controller.getTodo);
 router.post('/todo', controller.addTodo);
 router.delete('/todo', controller.deleteTodo);
+router.put('/todo', controller.updateTodo);
 exports.router = router;

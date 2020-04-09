@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.deleteTodo = exports.getTodo = exports.addTodo = undefined;
+exports.updateTodo = exports.deleteTodo = exports.getTodo = exports.addTodo = undefined;
 
 var _regenerator = require('babel-runtime/regenerator');
 
@@ -193,5 +193,69 @@ var deleteTodo = exports.deleteTodo = function () {
 
   return function deleteTodo(_x5, _x6) {
     return _ref3.apply(this, arguments);
+  };
+}();
+var updateTodo = exports.updateTodo = function () {
+  var _ref4 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee4(req, res) {
+    var _req$body2, id, title, response, message;
+
+    return _regenerator2.default.wrap(function _callee4$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            _context4.prev = 0;
+            _req$body2 = req.body, id = _req$body2.id, title = _req$body2.title;
+
+            if (id) {
+              _context4.next = 4;
+              break;
+            }
+
+            return _context4.abrupt('return', res.json(ERROR_WITH_CUSTOM_MESSAGE('Id is not provided')));
+
+          case 4:
+            _context4.next = 6;
+            return _models.TodoSchema.findOneAndUpdate(id, { title: title }, { new: true });
+
+          case 6:
+            response = _context4.sent;
+            message = 'Todo of ID ' + id + ' not found.';
+
+            if (response) {
+              _context4.next = 10;
+              break;
+            }
+
+            return _context4.abrupt('return', res.json(ERROR_WITH_CUSTOM_MESSAGE(message)));
+
+          case 10:
+            return _context4.abrupt('return', res.json({
+              code: 201,
+              success: true,
+              message: 'Todo is updated successfully',
+              data: response
+            }));
+
+          case 13:
+            _context4.prev = 13;
+            _context4.t0 = _context4['catch'](0);
+
+            res.json({
+              code: 400,
+              success: false,
+              message: _context4.t0.message,
+              data: []
+            });
+
+          case 16:
+          case 'end':
+            return _context4.stop();
+        }
+      }
+    }, _callee4, undefined, [[0, 13]]);
+  }));
+
+  return function updateTodo(_x7, _x8) {
+    return _ref4.apply(this, arguments);
   };
 }();
