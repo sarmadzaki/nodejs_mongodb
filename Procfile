@@ -1,1 +1,1 @@
-web: npm install && npm start
+web: npm i --save-dev babel-plugin-transform-runtime && npm start
