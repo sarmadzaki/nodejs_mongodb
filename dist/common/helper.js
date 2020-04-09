@@ -5,6 +5,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.sendEmail = undefined;
 
+var _promise = require('babel-runtime/core-js/promise');
+
+var _promise2 = _interopRequireDefault(_promise);
+
 var _nodemailer = require('nodemailer');
 
 var _nodemailer2 = _interopRequireDefault(_nodemailer);
@@ -12,7 +16,7 @@ var _nodemailer2 = _interopRequireDefault(_nodemailer);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var sendEmail = exports.sendEmail = function sendEmail(typeOfMail, data) {
-    return new Promise(function (resolve, reject) {
+    return new _promise2.default(function (resolve, reject) {
         var transporter = _nodemailer2.default.createTransport({
             service: 'gmail',
             auth: {
