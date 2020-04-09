@@ -4,7 +4,7 @@ import morgan from 'morgan';
 import bodyParser from 'body-parser'
 import fs from 'fs';
 
-import dbConfig from '../config/db';
+import dbConfig from './config/db';
 import { AuthRouter, TodoRouter} from './module';
 import { errorRoute } from './common/errorHandler';
 

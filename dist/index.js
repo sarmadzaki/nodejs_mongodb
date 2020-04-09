@@ -20,7 +20,7 @@ var _fs = require('fs');
 
 var _fs2 = _interopRequireDefault(_fs);
 
-var _db = require('../config/db');
+var _db = require('./config/db');
 
 var _db2 = _interopRequireDefault(_db);
 
