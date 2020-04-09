@@ -1,1 +1,1 @@
-web: npm i --save-dev babel-plugin-transform-runtime && npm start
+web: npm i --save body-parser && npm i --save-dev babel-plugin-transform-runtime && npm start
