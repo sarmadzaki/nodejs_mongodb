@@ -32,7 +32,7 @@ export const login = async (req, res) => {
             email,
             token
         };
-        return res.json(SUCCESS_MESSAGE('Login'));
+        return res.json({...SUCCESS_MESSAGE('Login'), data});
     }
     catch (error) {
         return res.json(ERROR_WITH_CUSTOM_MESSAGE(error.message));
@@ -52,7 +52,6 @@ export const register = async (req, res) => {
             success: false,
             message: 'User is already registered.'
         });
-        password = hashSync(password, 10);
         let userResponse = await User.create({
             first_name,
             last_name,
