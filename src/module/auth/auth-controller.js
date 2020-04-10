@@ -1,6 +1,7 @@
 import { User, UserToken } from '../../models';
 import { hashSync, compareSync } from 'bcrypt';
 import randomstring from 'randomstring';
+import { sign } from 'jsonwebtoken';
 import { sendEmail } from '../../common/helper';
 import * as helper from './auth-helper';
 import * as CONST from '../../constants';
@@ -13,18 +14,13 @@ export const login = async (req, res) => {
         SUCCESS_MESSAGE,
     } = MESSAGES;
     try {
-        let { email, password } = req.body;
-        let isUser = await User.findOne({ email });
-        if (!isUser) return res.json(USER_NOT_EXIST);
-        if (!compareSync(password, isUser.password))
-            return res.json(WRONG_PASSWORD)
-        let tokenResponse = await UserToken.create({
-            user_id: _id,
-            expired: false,
-            token: randomstring.generate(20)
-        });
-        let { _id, first_name, last_name } = isUser;
-        let { token } = tokenResponse;
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) return res.json(USER_NOT_EXIST);
+        if (!compareSync(password, user.password))
+            return res.json(WRONG_PASSWORD);
+        const token = sign({ id: user._id }, 'simplejoke', { expiresIn: '2m'});
+        const { _id, first_name, last_name } = user;
         let data = {
             _id,
             first_name,
@@ -32,7 +28,7 @@ export const login = async (req, res) => {
             email,
             token
         };
-        return res.json({...SUCCESS_MESSAGE('Login'), data});
+        return res.json({ ...SUCCESS_MESSAGE('Login'), data });
     }
     catch (error) {
         return res.json(ERROR_WITH_CUSTOM_MESSAGE(error.message));

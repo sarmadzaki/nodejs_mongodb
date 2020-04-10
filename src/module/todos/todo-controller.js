@@ -1,4 +1,4 @@
-import { TodoSchema } from '../../models';
+import { TodoSchema, UserToken } from '../../models';
 import { MESSAGES } from '../../common/Messages';
 const {
   ERROR_WITH_CUSTOM_MESSAGE
@@ -6,10 +6,12 @@ const {
 export const addTodo = async (req, res) => {
   try {
     const { title, description } = req.body;
+    const { id } = req;
     if (title && description) {
       const response = await TodoSchema.create({
         title,
         description,
+        user_id: id,
       });
       if (response) return res.json({
         code: 201,
@@ -29,7 +31,8 @@ export const addTodo = async (req, res) => {
 }
 export const getTodo = async (req, res) => {
   try {
-    const response = await TodoSchema.find();
+    const { id } = req;
+    const response = await TodoSchema.find({ user_id: id });
     if (response) return res.json({
       code: 200,
       success: true,
@@ -49,7 +52,7 @@ export const deleteTodo = async (req, res) => {
   try {
     const { id } = req.body;
     if (!id) return res.json(ERROR_WITH_CUSTOM_MESSAGE('Id is not provided'));
-    const response = await TodoSchema.findOneAndDelete({ _id: id });
+    const response = await TodoSchema.findOneAndDelete({ _id: id, user_id: req.id });
     let message = `Todo of ID ${id} not found.`
     if (!response) return res.json(ERROR_WITH_CUSTOM_MESSAGE(message));
     return res.json({
@@ -66,7 +69,7 @@ export const updateTodo = async (req, res) => {
   try {
     const { id, title } = req.body;
     if (!id) return res.json(ERROR_WITH_CUSTOM_MESSAGE('Id is not provided'));
-    const response = await TodoSchema.findOneAndUpdate(id, { title }, {new: true});
+    const response = await TodoSchema.findOneAndUpdate({id, user_id: req.id}, { title }, { new: true });
     let message = `Todo of ID ${id} not found.`
     if (!response) return res.json(ERROR_WITH_CUSTOM_MESSAGE(message));
     return res.json({
