@@ -13,7 +13,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var TodoSchema = new _mongoose.Schema({
     title: String,
-    description: String
+    description: String,
+    user_id: {
+        type: _mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    }
 });
 
 var todoSchema = exports.todoSchema = _mongoose2.default.model('Todos', TodoSchema);

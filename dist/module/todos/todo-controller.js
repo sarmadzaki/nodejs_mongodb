@@ -22,7 +22,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var ERROR_WITH_CUSTOM_MESSAGE = _Messages.MESSAGES.ERROR_WITH_CUSTOM_MESSAGE;
 var addTodo = exports.addTodo = function () {
   var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(req, res) {
-    var _req$body, title, description, response;
+    var _req$body, title, description, id, response;
 
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
@@ -30,23 +30,25 @@ var addTodo = exports.addTodo = function () {
           case 0:
             _context.prev = 0;
             _req$body = req.body, title = _req$body.title, description = _req$body.description;
+            id = req.id;
 
             if (!(title && description)) {
-              _context.next = 8;
+              _context.next = 9;
               break;
             }
 
-            _context.next = 5;
+            _context.next = 6;
             return _models.TodoSchema.create({
               title: title,
-              description: description
+              description: description,
+              user_id: id
             });
 
-          case 5:
+          case 6:
             response = _context.sent;
 
             if (!response) {
-              _context.next = 8;
+              _context.next = 9;
               break;
             }
 
@@ -57,12 +59,12 @@ var addTodo = exports.addTodo = function () {
               data: response
             }));
 
-          case 8:
-            _context.next = 13;
+          case 9:
+            _context.next = 14;
             break;
 
-          case 10:
-            _context.prev = 10;
+          case 11:
+            _context.prev = 11;
             _context.t0 = _context['catch'](0);
 
             res.json({
@@ -72,12 +74,12 @@ var addTodo = exports.addTodo = function () {
               data: []
             });
 
-          case 13:
+          case 14:
           case 'end':
             return _context.stop();
         }
       }
-    }, _callee, undefined, [[0, 10]]);
+    }, _callee, undefined, [[0, 11]]);
   }));
 
   return function addTodo(_x, _x2) {
@@ -86,20 +88,21 @@ var addTodo = exports.addTodo = function () {
 }();
 var getTodo = exports.getTodo = function () {
   var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(req, res) {
-    var response;
+    var id, response;
     return _regenerator2.default.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
             _context2.prev = 0;
-            _context2.next = 3;
-            return _models.TodoSchema.find();
+            id = req.id;
+            _context2.next = 4;
+            return _models.TodoSchema.find({ user_id: id });
 
-          case 3:
+          case 4:
             response = _context2.sent;
 
             if (!response) {
-              _context2.next = 6;
+              _context2.next = 7;
               break;
             }
 
@@ -110,12 +113,12 @@ var getTodo = exports.getTodo = function () {
               data: response
             }));
 
-          case 6:
-            _context2.next = 11;
+          case 7:
+            _context2.next = 12;
             break;
 
-          case 8:
-            _context2.prev = 8;
+          case 9:
+            _context2.prev = 9;
             _context2.t0 = _context2['catch'](0);
 
             res.json({
@@ -125,12 +128,12 @@ var getTodo = exports.getTodo = function () {
               data: []
             });
 
-          case 11:
+          case 12:
           case 'end':
             return _context2.stop();
         }
       }
-    }, _callee2, undefined, [[0, 8]]);
+    }, _callee2, undefined, [[0, 9]]);
   }));
 
   return function getTodo(_x3, _x4) {
@@ -156,7 +159,7 @@ var deleteTodo = exports.deleteTodo = function () {
 
           case 4:
             _context3.next = 6;
-            return _models.TodoSchema.findOneAndDelete({ _id: id });
+            return _models.TodoSchema.findOneAndDelete({ _id: id, user_id: req.id });
 
           case 6:
             response = _context3.sent;
@@ -215,7 +218,7 @@ var updateTodo = exports.updateTodo = function () {
 
           case 4:
             _context4.next = 6;
-            return _models.TodoSchema.findOneAndUpdate(id, { title: title }, { new: true });
+            return _models.TodoSchema.findOneAndUpdate({ id: id, user_id: req.id }, { title: title }, { new: true });
 
           case 6:
             response = _context4.sent;

@@ -25,6 +25,8 @@ var _randomstring = require('randomstring');
 
 var _randomstring2 = _interopRequireDefault(_randomstring);
 
+var _jsonwebtoken = require('jsonwebtoken');
+
 var _helper = require('../../common/helper');
 
 var _authHelper = require('./auth-helper');
@@ -43,7 +45,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var login = exports.login = function () {
     var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(req, res) {
-        var USER_NOT_EXIST, WRONG_PASSWORD, ERROR_WITH_CUSTOM_MESSAGE, SUCCESS_MESSAGE, _req$body, email, password, isUser, tokenResponse, _id, first_name, last_name, token, data;
+        var USER_NOT_EXIST, WRONG_PASSWORD, ERROR_WITH_CUSTOM_MESSAGE, SUCCESS_MESSAGE, _req$body, email, password, user, token, _id, first_name, last_name, data;
 
         return _regenerator2.default.wrap(function _callee$(_context) {
             while (1) {
@@ -56,9 +58,9 @@ var login = exports.login = function () {
                         return _models.User.findOne({ email: email });
 
                     case 5:
-                        isUser = _context.sent;
+                        user = _context.sent;
 
-                        if (isUser) {
+                        if (user) {
                             _context.next = 8;
                             break;
                         }
@@ -66,7 +68,7 @@ var login = exports.login = function () {
                         return _context.abrupt('return', res.json(USER_NOT_EXIST));
 
                     case 8:
-                        if ((0, _bcrypt.compareSync)(password, isUser.password)) {
+                        if ((0, _bcrypt.compareSync)(password, user.password)) {
                             _context.next = 10;
                             break;
                         }
@@ -74,17 +76,8 @@ var login = exports.login = function () {
                         return _context.abrupt('return', res.json(WRONG_PASSWORD));
 
                     case 10:
-                        _context.next = 12;
-                        return _models.UserToken.create({
-                            user_id: _id,
-                            expired: false,
-                            token: _randomstring2.default.generate(20)
-                        });
-
-                    case 12:
-                        tokenResponse = _context.sent;
-                        _id = isUser._id, first_name = isUser.first_name, last_name = isUser.last_name;
-                        token = tokenResponse.token;
+                        token = (0, _jsonwebtoken.sign)({ id: user._id }, 'simplejoke', { expiresIn: '2m' });
+                        _id = user._id, first_name = user.first_name, last_name = user.last_name;
                         data = {
                             _id: _id,
                             first_name: first_name,
@@ -94,17 +87,17 @@ var login = exports.login = function () {
                         };
                         return _context.abrupt('return', res.json((0, _extends3.default)({}, SUCCESS_MESSAGE('Login'), { data: data })));
 
-                    case 19:
-                        _context.prev = 19;
+                    case 16:
+                        _context.prev = 16;
                         _context.t0 = _context['catch'](1);
                         return _context.abrupt('return', res.json(ERROR_WITH_CUSTOM_MESSAGE(_context.t0.message)));
 
-                    case 22:
+                    case 19:
                     case 'end':
                         return _context.stop();
                 }
             }
-        }, _callee, undefined, [[1, 19]]);
+        }, _callee, undefined, [[1, 16]]);
     }));
 
     return function login(_x, _x2) {
