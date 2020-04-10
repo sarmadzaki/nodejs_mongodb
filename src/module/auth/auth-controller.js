@@ -19,7 +19,7 @@ export const login = async (req, res) => {
         if (!user) return res.json(USER_NOT_EXIST);
         if (!compareSync(password, user.password))
             return res.json(WRONG_PASSWORD);
-        const token = sign({ id: user._id }, 'simplejoke', { expiresIn: '2m'});
+        const token = sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: '5h' });
         const { _id, first_name, last_name } = user;
         let data = {
             _id,
