@@ -35,7 +35,7 @@
     "jsonwebtoken": "8.5.1",
     "mongoose": "^5.2.10",
     "morgan": "^1.9.0",
-    "nodemailer": "^4.6.8",
+    "nodemailer": "^6.4.16",
     "randomstring": "^1.1.5"
   },
   "devDependencies": {
